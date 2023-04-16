@@ -1,5 +1,3 @@
-package Assignment3;
-
 /**
  * Class DiningPhilosophers
  * The main starter.
@@ -45,21 +43,21 @@ public class DiningPhilosophers {
              * Should be settable from the command line
              * or the default if no arguments supplied.
              */
-
-            //Set it to the default to start with
             int iPhilosophers = DEFAULT_NUMBER_OF_PHILOSOPHERS;
+
+            // PA3 Implementation start
             if (args.length > 0) {
                 try {
                     iPhilosophers = Integer.parseInt(args[0]);
                     if (iPhilosophers <= 0) {
-                        System.out.println("\"" + iPhilosophers + "\" is not a positive decimal integer");
-                        iPhilosophers = DEFAULT_NUMBER_OF_PHILOSOPHERS;
+                        throw new NumberFormatException();
                     }
                 }
                 catch (NumberFormatException e) {
                     System.out.println("\"" + args[0] + "\" is not a positive decimal integer");
                 }
             }
+            // PA3 Implementation end
 
             // Make the monitor aware of how many philosophers there are
             soMonitor = new Monitor(iPhilosophers);
@@ -73,11 +71,12 @@ public class DiningPhilosophers {
                 aoPhilosophers[j].start();
             }
 
-            System.out.println
-                    (
-                            iPhilosophers +
-                                    " philosopher(s) came in for a dinner."
-                    );
+            System.out.println(ANSI_CYAN + iPhilosophers + " philosopher(s) came in for a dinner.");
+            for (int i = 0; i < iPhilosophers; i++)
+            {
+                System.out.print("웃 ");
+            }
+            System.out.println("" + ANSI_RESET);
 
             // Main waits for all its children to die...
             // I mean, philosophers to finish their dinner.
@@ -103,6 +102,14 @@ public class DiningPhilosophers {
         System.err.println("Stack Trace      : ");
         poException.printStackTrace(System.err);
     }
+
+    public static void displayMessage() {
+        System.out.println(ANSI_YELLOW + "----------------------------------------");
+        System.out.println("         COMP 346 Assignment 3");
+        System.out.println("     Suha Abubakr & Amanda Beronilla :)");
+        System.out.println("----------------------------------------" + ANSI_RESET);
+    }
 }
+
 
 // EOF

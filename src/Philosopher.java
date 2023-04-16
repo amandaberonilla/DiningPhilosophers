@@ -1,6 +1,4 @@
-package Assignment3;
-
-import Assignment3.common.BaseThread;
+import common.BaseThread;
 
 /**
  * Class Philosopher.
@@ -24,11 +22,17 @@ public class Philosopher extends BaseThread {
      */
     public void eat() {
         try {
+            // PA3: Implementation start
             System.out.println("Philosopher " + this.iTID + " has started eating");
             Thread.yield();
+            // PA3: Implementation end
+
             sleep((long) (Math.random() * TIME_TO_WASTE));
+
+            // PA3: Implementation start
             Thread.yield();
             System.out.println("Philosopher " + this.iTID + " is done eating");
+            // PA3: Implementation end
         } catch (InterruptedException e) {
             System.err.println("Philosopher.eat():");
             DiningPhilosophers.reportException(e);
@@ -45,6 +49,7 @@ public class Philosopher extends BaseThread {
      * - The print that they are done thinking.
      */
     public void think() {
+        // PA3: Implementation start
         try {
             System.out.println("Philosopher " + this.iTID + " has started thinking");
             Thread.yield();
@@ -56,6 +61,7 @@ public class Philosopher extends BaseThread {
             e.printStackTrace();
             System.exit(1);
         }
+        // PA3: Implementation end
     }
 
     /**
@@ -67,11 +73,17 @@ public class Philosopher extends BaseThread {
      * - The print that they are done talking.
      */
     public void talk() {
+        // PA3: Implementation start
         System.out.println("Philosopher " + this.iTID + " has started talking");
         Thread.yield();
+        // PA3: Implementation end
+
         saySomething();
+
+        // PA3: Implementation start
         Thread.yield();
         System.out.println("Philosopher "+ this.iTID + " is done talking");
+        // PA3: Implementation end
     }
 
     /**
@@ -93,19 +105,15 @@ public class Philosopher extends BaseThread {
              * philosopher is about to say something terribly useful.
              */
 
-            // define the range
-            int max = 10;
-            int min = 1;
-            int range = max - min + 1;
-
-            // generate a random number within 1 to 10
-            int rand = (int)(Math.random() * range) + min;
-
-            if(rand % 3 == 0){
+            // PA3: Implementation start
+            ///// Allowing a philosopher to speak if the number rolled on the die is even.
+            int dieRoll = (int)(Math.random() * 6) + 1;
+            if(dieRoll % 2 == 0) {
                 DiningPhilosophers.soMonitor.requestTalk();
                 talk();
                 DiningPhilosophers.soMonitor.endTalk();
             }
+            // PA3: Implementation end
 
             Thread.yield();
         }
@@ -116,20 +124,17 @@ public class Philosopher extends BaseThread {
      * Feel free to add your own phrases.
      */
     public void saySomething() {
-        String[] astrPhrases =
-                {
-                        "Eh, it's not easy to be a philosopher: eat, think, talk, eat...",
-                        "You know, true is false and false is true if you think of it",
-                        "2 + 2 = 5 for extremely large values of 2...",
-                        "If thee cannot speak, thee must be silent",
-                        "My number is " + getTID() + ""
-                };
+        String[] astrPhrases = {
+                "Eh, it's not easy to be a philosopher: eat, think, talk, eat...",
+                "You know, true is false and false is true if you think of it",
+                "2 + 2 = 5 for extremely large values of 2...",
+                "If thee cannot speak, thee must be silent",
+                "To be or not to be",
+                "We get as close to death as we can to feel alive",
+                "My number is " + getTID() + ""
+        };
 
-        System.out.println
-                (
-                        "Philosopher " + getTID() + " says: " +
-                                astrPhrases[(int) (Math.random() * astrPhrases.length)]
-                );
+        System.out.println(ANSI_YELLOW + "Philosopher 웃 " + getTID() + " says: " + astrPhrases[(int) (Math.random() * astrPhrases.length)] + ANSI_RESET);
     }
 }
 

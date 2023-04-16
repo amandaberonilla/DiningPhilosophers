@@ -1,7 +1,3 @@
-package Assignment3;
-
-
-
 /**
  * Class Monitor
  * To synchronize dining philosophers.
@@ -14,9 +10,9 @@ public class Monitor {
      * Data members
      * ------------
      */
-    private final int NUM_OF_CHOPSTICKS;
-    private boolean[] chopstickState;
-    private boolean speaker;
+    private final int numberOfChopsticks;
+    private boolean[] chopstickStates;
+    private boolean currentSpeaker;     // Mutex to determine whether someone is currently speaking.
 
 
 
@@ -25,11 +21,11 @@ public class Monitor {
      * Constructor
      */
     public Monitor(int piNumberOfPhilosophers) {
+        // PA3: Implementation
         // TODO: set appropriate number of chopsticks based on the # of philosophers
-        NUM_OF_CHOPSTICKS = piNumberOfPhilosophers;
-        chopstickState = new boolean[piNumberOfPhilosophers];
-        speaker = false;
-
+        numberOfChopsticks = piNumberOfPhilosophers;
+        chopstickStates = new boolean[piNumberOfPhilosophers]; // initially false
+        currentSpeaker = false;
     }
 
     /*
@@ -43,23 +39,25 @@ public class Monitor {
      * Else forces the philosopher to wait()
      */
     public synchronized void pickUp(final int piTID) {
-        //Here we are telling the philosopher to pick up the left chopstick before the right one
-        //To do so we must first specify to the philosopher what are the right and left chopsticks for them
-        int leftChopstick,rightChopstick;
+        // PA3: Implementation
+        ///// Defining the left and right chopsticks.
+        int leftChopstick, rightChopstick;
+        leftChopstick = (piTID + numberOfChopsticks - 1) % numberOfChopsticks; // circular array
+        rightChopstick = piTID % numberOfChopsticks;
 
-        leftChopstick = piTID - 1;
-        rightChopstick = piTID % NUM_OF_CHOPSTICKS;
-        try{
-            while(chopstickState[leftChopstick] || chopstickState[rightChopstick]){
+        ///// Telling the philosopher to pick up the left chopstick before the right one.
+        try {
+            // Attempting to take the left chopstick.
+            while(chopstickStates[leftChopstick] || chopstickStates[rightChopstick]) {
                 wait();
             }
-            chopstickState[leftChopstick] = true;
-            //Added to account for any possible interruptions, that would change the state of the right chopstick
-            while(chopstickState[rightChopstick]){
+            chopstickStates[leftChopstick] = true;
+            // Attempting to ake right chopstick.
+            while(chopstickStates[rightChopstick]) {
                 wait();
             }
-            chopstickState[rightChopstick] = true;
-        } catch (InterruptedException e){
+            chopstickStates[rightChopstick] = true;
+        } catch (InterruptedException e) {
             System.err.println("Monitor.pickup():");
             DiningPhilosophers.reportException(e);
             System.exit(1);
@@ -71,8 +69,10 @@ public class Monitor {
      * and let others know they are available.
      */
     public synchronized void putDown(final int piTID) {
-        chopstickState[piTID - 1] = false;
-        chopstickState[piTID % NUM_OF_CHOPSTICKS] = false;
+        // PA3: Implementation
+        ///// Resetting the states of the chopsticks.
+        chopstickStates[(piTID + numberOfChopsticks - 1) % numberOfChopsticks] = false;
+        chopstickStates[piTID % numberOfChopsticks] = false;
 
         notifyAll();
     }
