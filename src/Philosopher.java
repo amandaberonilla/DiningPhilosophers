@@ -7,6 +7,8 @@ import common.BaseThread;
  * @author Serguei A. Mokhov, mokhov@cs.concordia.ca
  */
 public class Philosopher extends BaseThread {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
     /**
      * Max time an action can take (in milliseconds)
      */

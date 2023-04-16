@@ -5,6 +5,9 @@
  * @author Serguei A. Mokhov, mokhov@cs.concordia.ca
  */
 public class DiningPhilosophers {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_CYAN = "\u001B[36m";
     /*
      * ------------
      * Data members
@@ -37,6 +40,7 @@ public class DiningPhilosophers {
      * Main system starts up right here
      */
     public static void main(String[] args) {
+        displayMessage();
         try {
             /*
              * TODO:
@@ -55,6 +59,8 @@ public class DiningPhilosophers {
                 }
                 catch (NumberFormatException e) {
                     System.out.println("\"" + args[0] + "\" is not a positive decimal integer");
+                    System.out.println("Usage: java DiningPhilosophers [NUMBER_OF_PHILOSOPHERS]");
+                    System.exit(0);
                 }
             }
             // PA3 Implementation end
@@ -83,7 +89,13 @@ public class DiningPhilosophers {
             for (int j = 0; j < iPhilosophers; j++)
                 aoPhilosophers[j].join();
 
-            System.out.println("All philosophers have left. System terminates normally.");
+            System.out.println(ANSI_CYAN + "All philosophers have left. System terminates normally.");
+            System.out.print("\uD83D\uDEAA ...");
+            for (int i = 0; i < iPhilosophers; i++)
+            {
+                System.out.print("웃 ");
+            }
+            System.out.println("" + ANSI_RESET);
         } catch (InterruptedException e) {
             System.err.println("main():");
             reportException(e);

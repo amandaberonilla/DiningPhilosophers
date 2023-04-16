@@ -82,11 +82,13 @@ public class Monitor {
      * (while she is not eating).
      */
     public synchronized void requestTalk() {
-        try{
-            while(speaker){
+        // PA3: Implementation
+        try {
+            // Attempting to talk.
+            while(currentSpeaker) {
                 wait();
             }
-            speaker = true;
+            currentSpeaker = true;
         } catch (InterruptedException e){
             System.err.println("Monitor.requestTalk:");
             DiningPhilosophers.reportException(e);
@@ -99,7 +101,9 @@ public class Monitor {
      * can feel free to start talking.
      */
     public synchronized void endTalk() {
-        speaker = false;
+
+        // PA3: Implementation
+        currentSpeaker = false;
     }
 }
 
